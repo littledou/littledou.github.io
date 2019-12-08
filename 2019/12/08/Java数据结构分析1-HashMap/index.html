@@ -8,14 +8,15 @@
   <title>Java数据结构分析&lt;1&gt;-HashMap | littledou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="要点 存放键值对 JDK1.8之前基于数组加链表，之后改为数组加链表加红黑树，并且增加了扩容的优化 允许一个key为null，允许多个value为null 线程不安全   基本操作1&#x2F;&#x2F;创建一个 map2Map&amp;lt;String, String&amp;gt; map &#x3D; new HashMap&amp;lt;&amp;gt;();34&#x2F;&#x2F;如果 key 不存在则插入数据，如果 key 已存在则更新数据5map.put(">
+<meta name="keywords" content="Java, Android, C, 数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java数据结构分析&lt;1&gt;-HashMap">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;08&#x2F;Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;08&#x2F;Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap&#x2F;index.html">
 <meta property="og:site_name" content="littledou">
 <meta property="og:description" content="要点 存放键值对 JDK1.8之前基于数组加链表，之后改为数组加链表加红黑树，并且增加了扩容的优化 允许一个key为null，允许多个value为null 线程不安全   基本操作1&#x2F;&#x2F;创建一个 map2Map&amp;lt;String, String&amp;gt; map &#x3D; new HashMap&amp;lt;&amp;gt;();34&#x2F;&#x2F;如果 key 不存在则插入数据，如果 key 已存在则更新数据5map.put(">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;lqSOgohALc9z5bF.png">
-<meta property="og:updated_time" content="2019-12-08T13:06:45.314Z">
+<meta property="og:updated_time" content="2019-12-08T13:16:42.814Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;lqSOgohALc9z5bF.png">
   
@@ -41,6 +42,10 @@
         <a href="/" id="logo">littledou</a>
       </h1>
       
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">hongbin</a>
+        </h2>
+      
     </div>
     <div id="header-inner" class="inner">
       <nav id="main-nav">
@@ -58,7 +63,7 @@
         <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/littledou"></form>
       </div>
     </div>
   </div>
@@ -94,6 +99,7 @@
 </ul>
 <p><img src="https://i.loli.net/2019/12/08/lqSOgohALc9z5bF.png" alt="img"></p>
 <h5 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个 map</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//如果 key 不存在则插入数据，如果 key 已存在则更新数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">map.put(<span class="string">"test"</span>, <span class="string">"哈哈"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据 key 获取 value</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">map.get(<span class="string">"test"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//上面已经插入了 key，这里相当更新 key 的 value</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">map.put(<span class="string">"test"</span>, <span class="string">"呵呵"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//删除 key 及 value</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">map.remove(<span class="string">"test"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//遍历</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (String key : map.keySet()) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    System.out.println(key);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+<a id="more"></a>
 <h5 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">()</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.loadFactor = DEFAULT_LOAD_FACTOR; <span class="comment">// all other fields defaulted</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
 
 <h5 id="PUT操作流程"><a href="#PUT操作流程" class="headerlink" title="PUT操作流程"></a>PUT操作流程</h5><p>首次添加元素，table为空，putVal方法中可以先看resize()方法初始化table。旧的容量（oldCap）以及阈值（oldThr）均为0，阈值是啥暂时不知道。</p>
@@ -115,7 +121,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/" data-id="ck3x0v3q90001pecv2vimgnvz" class="article-share-link">Share</a>
+      <a data-url="https://github.com/littledou/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/" data-id="ck3x1749v0000sjcv1ja0cdea" class="article-share-link">Share</a>
       
       
     </footer>
@@ -133,11 +139,6 @@
       </div>
     </a>
   
-  
-    <a href="/2019/12/08/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World</div>
-    </a>
   
 </nav>
 
@@ -180,10 +181,6 @@
             <a href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/">Java数据结构分析&lt;1&gt;-HashMap</a>
           </li>
         
-          <li>
-            <a href="/2019/12/08/hello-world/">Hello World</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -197,7 +194,6 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2019 hongbin.dou<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

@@ -8,9 +8,10 @@
   <title>Java数据结构分析&lt;2&gt;-ArrayList | littledou</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="要点 基于顺序表数组实现，允许空值以及null,可自动扩容 线程不安全  基本操作1List&amp;lt;String&amp;gt; list &#x3D; new ArrayList();2list.add(&quot;data1&quot;);3list.add(0,&quot;data2&quot;);4list.get(0);5list.remove(0);6list.clear(); 构造方法1&#x2F;&#x2F;默认初始容量2private static fin">
+<meta name="keywords" content="Java, Android, C, 数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java数据结构分析&lt;2&gt;-ArrayList">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;08&#x2F;Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList&#x2F;index.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;08&#x2F;Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList&#x2F;index.html">
 <meta property="og:site_name" content="littledou">
 <meta property="og:description" content="要点 基于顺序表数组实现，允许空值以及null,可自动扩容 线程不安全  基本操作1List&amp;lt;String&amp;gt; list &#x3D; new ArrayList();2list.add(&quot;data1&quot;);3list.add(0,&quot;data2&quot;);4list.get(0);5list.remove(0);6list.clear(); 构造方法1&#x2F;&#x2F;默认初始容量2private static fin">
 <meta property="og:locale" content="zh-CN">
@@ -18,7 +19,7 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;JCKr4V2nZMlGEg1.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;hD35CMiYlyJgPvw.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;d3fQoz1L9GmcHFW.png">
-<meta property="og:updated_time" content="2019-12-08T13:06:50.513Z">
+<meta property="og:updated_time" content="2019-12-08T13:16:55.411Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;3aQjT96qHzEGIZm.png">
   
@@ -44,6 +45,10 @@
         <a href="/" id="logo">littledou</a>
       </h1>
       
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">hongbin</a>
+        </h2>
+      
     </div>
     <div id="header-inner" class="inner">
       <nav id="main-nav">
@@ -61,7 +66,7 @@
         <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://github.com/littledou"></form>
       </div>
     </div>
   </div>
@@ -97,7 +102,8 @@
 <h5 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认初始容量</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认占位数组</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> Object[] elementData;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> size;<span class="comment">//当前数据元素个数</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;<span class="comment">//一般使用此构造方法</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
 
 <h5 id="添加元素"><a href="#添加元素" class="headerlink" title="添加元素"></a>添加元素</h5><ol>
-<li>尾部添加<br><img src="https://i.loli.net/2019/12/08/3aQjT96qHzEGIZm.png" alt="尾部插入示意图"><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    ensureCapacityInternal(size + <span class="number">1</span>);<span class="comment">//判定并给出可以放置新元素的空间</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    elementData[size++] = e;<span class="comment">//赋值</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure></li>
+<li>尾部添加<br><img src="https://i.loli.net/2019/12/08/3aQjT96qHzEGIZm.png" alt="尾部插入示意图"><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    ensureCapacityInternal(size + <span class="number">1</span>);<span class="comment">//判定并给出可以放置新元素的空间</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    elementData[size++] = e;<span class="comment">//赋值</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+<a id="more"></a></li>
 <li>指定位置插入<br><img src="https://i.loli.net/2019/12/08/JCKr4V2nZMlGEg1.png" alt="指定位置插入示意图"></li>
 </ol>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> index, E element)</span> </span>&#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">//检查index的合法性</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">if</span> (index &gt; size || index &lt; <span class="number">0</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(outOfBoundsMsg(index));</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">//判定并给出可以放置新元素的空间</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    ensureCapacityInternal(size + <span class="number">1</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    <span class="comment">//将index之后的数据后移一位</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    System.arraycopy(elementData, index, elementData, index + <span class="number">1</span>, size - index);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    elementData[index] = element;<span class="comment">//赋值</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    size++;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
@@ -118,7 +124,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/" data-id="ck3x0v3qc0002pecvan2phxhh" class="article-share-link">Share</a>
+      <a data-url="https://github.com/littledou/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/" data-id="ck3x174a10001sjcv82mo23n2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -174,10 +180,6 @@
             <a href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/">Java数据结构分析&lt;1&gt;-HashMap</a>
           </li>
         
-          <li>
-            <a href="/2019/12/08/hello-world/">Hello World</a>
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -191,7 +193,6 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2019 hongbin.dou<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

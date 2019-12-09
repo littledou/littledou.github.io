@@ -46,29 +46,32 @@
   };
 </script>
 
-  <meta name="description" content="士不可以不弘毅，任重而道远">
+  <meta name="description" content="简介 一个Android 已封装好的轻量级异步类 属于抽象类，即使用时需 实现子类 实现多线程，在工作线程中执行任务，如耗时任务 实现工作线程 &amp;amp; 主线程（UI线程）之间的通信 方便实现异步通信 采用线程池的缓存线程 + 复用线程，避免了频繁创建 &amp;amp; 销毁线程所带来的系统资源开销  1static class MyTask extends AsyncTask&amp;lt;Object,">
 <meta name="keywords" content="Java, Android, C, 数据结构">
-<meta property="og:type" content="website">
-<meta property="og:title" content="littledou">
-<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;index.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java线程之AsyncTask源码分析">
+<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;09&#x2F;Java%E7%BA%BF%E7%A8%8B%E4%B9%8BAsyncTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90&#x2F;index.html">
 <meta property="og:site_name" content="littledou">
-<meta property="og:description" content="士不可以不弘毅，任重而道远">
+<meta property="og:description" content="简介 一个Android 已封装好的轻量级异步类 属于抽象类，即使用时需 实现子类 实现多线程，在工作线程中执行任务，如耗时任务 实现工作线程 &amp;amp; 主线程（UI线程）之间的通信 方便实现异步通信 采用线程池的缓存线程 + 复用线程，避免了频繁创建 &amp;amp; 销毁线程所带来的系统资源开销  1static class MyTask extends AsyncTask&amp;lt;Object,">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;09&#x2F;cYAsmpe7g2ZCkzQ.png">
+<meta property="og:updated_time" content="2019-12-09T06:24:18.568Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;09&#x2F;cYAsmpe7g2ZCkzQ.png">
 
-<link rel="canonical" href="https://github.com/littledou/">
+<link rel="canonical" href="https://github.com/littledou/2019/12/09/Java%E7%BA%BF%E7%A8%8B%E4%B9%8BAsyncTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false
+    isHome: false,
+    isPost: true
   };
 </script>
 
-  <title>littledou</title>
+  <title>Java线程之AsyncTask源码分析 | littledou</title>
   
 
 
@@ -164,10 +167,10 @@
             
 
   <div class="posts-expand">
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/09/Java%E7%BA%BF%E7%A8%8B%E4%B9%8BAsyncTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -181,8 +184,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/09/Java%E7%BA%BF%E7%A8%8B%E4%B9%8BAsyncTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">Java线程之AsyncTask源码分析</a>
+          Java线程之AsyncTask源码分析
         </h1>
 
         <div class="post-meta">
@@ -207,7 +209,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><ul>
+        <h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><ul>
 <li>一个Android 已封装好的轻量级异步类</li>
 <li>属于抽象类，即使用时需 实现子类</li>
 <li>实现多线程，在工作线程中执行任务，如耗时任务</li>
@@ -243,168 +245,33 @@
 经测试，并发执行任务时，提交线程小于等于20时，未启用拒绝策略，备用线程池未启动，当线程数为20-25时，启用拒绝策略，多余的并发提交到备用线程池启动处理，备用线程池只能处理5个并发，但是都是核心线程。并发超过25后，任务会在备用线程池LinkedBlockingQueue阻塞队列中累积，所以备用线程池中有句hopefully almost never，并不希望AsyncTask处理太多的并发。适合处理20个并发内的任务，偶尔增长至20-25，如果持续25以上的并发，会导致资源消耗过多</li>
 </ul>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hongbin.dou">
-      <meta itemprop="description" content="士不可以不弘毅，任重而道远">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="littledou">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/" class="post-title-link" itemprop="url">Java数据结构分析<2>-ArrayList</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-08 21:00:24 / 修改时间：21:17:39" itemprop="dateCreated datePublished" datetime="2019-12-08T21:00:24+08:00">2019-12-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h4><ul>
-<li>基于顺序表数组实现，允许空值以及null,可自动扩容</li>
-<li>线程不安全</li>
-</ul>
-<h5 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">list.add(<span class="string">"data1"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">list.add(<span class="number">0</span>,<span class="string">"data2"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">list.get(<span class="number">0</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">list.remove(<span class="number">0</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">list.clear();</span></pre></td></tr></table></figure>
-<h5 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认初始容量</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_CAPACITY = <span class="number">10</span>;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] EMPTY_ELEMENTDATA = &#123;&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认占位数组</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> Object[] elementData;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> size;<span class="comment">//当前数据元素个数</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;<span class="comment">//一般使用此构造方法</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/" rel="prev" title="Java数据结构分析<2>-ArrayList">
+      <i class="fa fa-chevron-left"></i> Java数据结构分析<2>-ArrayList
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="hongbin.dou">
-      <meta itemprop="description" content="士不可以不弘毅，任重而道远">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="littledou">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/" class="post-title-link" itemprop="url">Java数据结构分析<1>-HashMap</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-12-08 20:52:00 / 修改时间：21:17:48" itemprop="dateCreated datePublished" datetime="2019-12-08T20:52:00+08:00">2019-12-08</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h4 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h4><ul>
-<li>存放键值对</li>
-<li>JDK1.8之前基于数组加链表，之后改为数组加链表加红黑树，并且增加了扩容的优化</li>
-<li>允许一个key为null，允许多个value为null</li>
-<li>线程不安全</li>
-</ul>
-<p><img src="https://i.loli.net/2019/12/08/lqSOgohALc9z5bF.png" alt="img"></p>
-<h5 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个 map</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">Map&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//如果 key 不存在则插入数据，如果 key 已存在则更新数据</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">map.put(<span class="string">"test"</span>, <span class="string">"哈哈"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//根据 key 获取 value</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">map.get(<span class="string">"test"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//上面已经插入了 key，这里相当更新 key 的 value</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">map.put(<span class="string">"test"</span>, <span class="string">"呵呵"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//删除 key 及 value</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">map.remove(<span class="string">"test"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//遍历</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (String key : map.keySet()) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    System.out.println(key);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
   </article>
   
   
   
 
   </div>
-
-  
-
 
 
           </div>
@@ -455,6 +322,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构造方法"><span class="nav-number">2.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程调度"><span class="nav-number">3.</span> <span class="nav-text">线程调度</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

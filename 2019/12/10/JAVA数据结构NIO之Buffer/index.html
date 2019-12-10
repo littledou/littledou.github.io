@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('https://github.com/littledou').hostname,
+    root: '/',
+    scheme: 'Muse',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="NIO中 Buffer 是一个用于存储基本类型值的容器，它以类似于数组的方式存储和组织数据，线性有序，每个基本数据类型都有一个子类与之对应。 ## 参数、方法0 &amp;lt;&#x3D; mark &amp;lt;&#x3D; position &amp;lt;&#x3D; limit &amp;lt;&#x3D; capacity  capacity:容量 limit: 限制, 限制索引，数据只能读取到当前索引前一位，不包括当前索引 position: 位置 m">
+<meta name="keywords" content="Java, Android, C, 数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA数据结构NIO之Buffer">
+<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;10&#x2F;JAVA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84NIO%E4%B9%8BBuffer&#x2F;index.html">
+<meta property="og:site_name" content="littledou">
+<meta property="og:description" content="NIO中 Buffer 是一个用于存储基本类型值的容器，它以类似于数组的方式存储和组织数据，线性有序，每个基本数据类型都有一个子类与之对应。 ## 参数、方法0 &amp;lt;&#x3D; mark &amp;lt;&#x3D; position &amp;lt;&#x3D; limit &amp;lt;&#x3D; capacity  capacity:容量 limit: 限制, 限制索引，数据只能读取到当前索引前一位，不包括当前索引 position: 位置 m">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;09&#x2F;q56HDsFdTxpIfwr.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;10&#x2F;Q5cLxvnWSIfbZVt.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;10&#x2F;2rbpaV4FSYmlT3g.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;10&#x2F;5qltKAhjWEeiVM1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;10&#x2F;sDNCPUAIugOfh8Z.png">
+<meta property="og:updated_time" content="2019-12-10T07:23:32.972Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;09&#x2F;q56HDsFdTxpIfwr.png">
+
+<link rel="canonical" href="https://github.com/littledou/2019/12/10/JAVA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84NIO%E4%B9%8BBuffer/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>JAVA数据结构NIO之Buffer | littledou</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">littledou</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">hongbin</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/10/JAVA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84NIO%E4%B9%8BBuffer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hongbin.dou">
+      <meta itemprop="description" content="士不可以不弘毅，任重而道远">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="littledou">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JAVA数据结构NIO之Buffer
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-10 15:21:22 / 修改时间：15:23:32" itemprop="dateCreated datePublished" datetime="2019-12-10T15:21:22+08:00">2019-12-10</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="https://i.loli.net/2019/12/09/q56HDsFdTxpIfwr.png" alt="Buffer类图.png"><br>NIO中 <a href="https://developer.android.com/reference/java/nio/Buffer.html" target="_blank" rel="noopener">Buffer</a> 是一个用于存储基本类型值的容器，它以类似于数组的方式存储和组织数据，线性有序，每个基本数据类型都有一个子类与之对应。</p>
+<p>##</p>
+<h4 id="参数、方法"><a href="#参数、方法" class="headerlink" title="参数、方法"></a>参数、方法</h4><p>0 &lt;= mark &lt;= position &lt;= limit &lt;= capacity</p>
+<ul>
+<li><strong>capacity</strong>:容量</li>
+<li><strong>limit</strong>: 限制, 限制索引，数据只能读取到当前索引前一位，不包括当前索引</li>
+<li><strong>position</strong>: 位置</li>
+<li><strong>mark</strong>: 标记</li>
+<li><strong>remaining()</strong>: 返回当前位置与limit之间的元素个数（limit - position）</li>
+<li><strong>mark()</strong>: 标记当前position，在调用reset后将position恢复到前一个mark点</li>
+<li><strong>clear()</strong>: 还原缓冲区的状态，一般用于清空后重新存数据</li>
+<li><strong>flip()</strong>: 对缓冲区反转，缩小limit的范围至position，position归0，丢弃mark，用于截取部分</li>
+<li><strong>hasArray()</strong>: 是否存在底层实现的数组，直接缓冲区不存在</li>
+<li><strong>rewind()</strong>: 重绕缓冲区，position归0，丢弃mark，一般在重新读取缓冲区数据时使用</li>
+<li><strong>arrayOffset()</strong>: 偏移量</li>
+</ul>
+<a id="more"></a>
+<h4 id="创建Buffer"><a href="#创建Buffer" class="headerlink" title="创建Buffer"></a>创建Buffer</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过已有的数组创建Buffer</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> array[] = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">IntBuffer intBuffer = IntBuffer.wrap(array);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//申请容量为capacity=10的int类型缓冲区</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">IntBuffer intBuffer = IntBuffer.allocate(<span class="number">10</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//以上两种为非直接缓冲区，下面为直接缓冲区创建，不需通过JVM创建中间缓冲区用于交换数据，效率高，isDirect()=true</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">ByteBuffer buffer= ByteBuffer.allocateDirect(<span class="number">10</span>);</span></pre></td></tr></table></figure>
+<p><strong>须知</strong>：</p>
+<ul>
+<li>缓冲区的capacity不能为负数，缓冲区的limit不能为负数，缓冲区的position不能为负数。</li>
+<li>position不能大于其limit。</li>
+<li>limit不能大于其capacity。</li>
+<li>如果定义了mark，则在将position或limit调整为小于该mark的值时，该mark被丢弃。</li>
+<li>如果未定义mark，那么调用reset()方法将导致抛出InvalidMarkException异常。</li>
+<li>如果position大于新的limit，则position的值就是新limit的值。</li>
+<li>当limit和position值一样时，在指定的position写入数据时会出现异常，因为此位置是被限制的。</li>
+</ul>
+<h4 id="ByteBuffer以字节为单位对数据进行存取"><a href="#ByteBuffer以字节为单位对数据进行存取" class="headerlink" title="ByteBuffer以字节为单位对数据进行存取"></a>ByteBuffer以字节为单位对数据进行存取</h4><p>主要操作</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">ByteBuffer buffer = ByteBuffer.allocate(<span class="number">10</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//单个字节的get, put操作</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">buffer.put((<span class="keyword">byte</span>) <span class="number">127</span>);<span class="comment">//将127存入</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">buffer.get(<span class="number">0</span>);<span class="comment">//取出127</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//基于数组的get, put</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span> data[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">buffer.put(data);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//也可以直接put Buffer</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span> data[] = &#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">ByteBuffer bu2 = ByteBuffer.wrap(data);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">buffer.put(bu2);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">buffer.position(<span class="number">0</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data1 = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">3</span>];</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">buffer.get(data1);<span class="comment">//get 数组</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//getType, putType, asTypeBuffer,包含其他类型的缓冲区</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//对字符缓冲区压缩（compacting）、复制（duplicating）、截取（slicing）</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">buffer.compact()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">buffer.duplicate()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">buffer.slice()</span></pre></td></tr></table></figure>
+
+<p><strong>slice方法</strong>：创建新的缓冲区，新缓冲区从当前缓冲区position开始，两个缓冲区的操作均可见</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] bytes = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">0</span>&#125;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">ByteBuffer buffer1 = ByteBuffer.wrap(bytes);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">buffer1.position(<span class="number">5</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">ByteBuffer buffer2 = buffer1.slice();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">buffer2.put(<span class="number">0</span>,(<span class="keyword">byte</span>) <span class="number">111</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">System.out.println(Arrays.toString(buffer1.array()));</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">System.out.println(Arrays.toString(buffer2.array()));</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">System.out.println(buffer1.arrayOffset());</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">System.out.println(buffer2.arrayOffset());</span></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/12/10/Q5cLxvnWSIfbZVt.png" alt="buffer_slice方法示例.png"></p>
+<p><strong>asCharBuffer方法</strong>：创建此子节缓冲区的视图，作为char缓冲区，新缓冲区从当前缓冲区position开始，操作相互可见。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//byte[] data = "中文".getBytes("UTF-16BE");</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="string">"中文"</span>.getBytes(<span class="string">"utf-8"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">ByteBuffer byteBuffer = ByteBuffer.wrap(data);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">System.out.println(byteBuffer);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">CharBuffer charBuffer = byteBuffer.asCharBuffer();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">System.out.println(charBuffer+<span class="string">" - "</span>+charBuffer.getClass().getName());</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">System.out.println(charBuffer.position()+<span class="string">":"</span>+charBuffer.limit()+<span class="string">":"</span>+charBuffer.capacity());</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; charBuffer.capacity(); i++) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    System.out.println(charBuffer.get());</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/12/10/2rbpaV4FSYmlT3g.png" alt="charbuffer演示1.png"><br>打印为乱码，字符串getBytes方法默认数组存储编码为utf-8， 但是CharBuffer类的子类ByteBufferAsCharBuffer输出时是使用UTF-16BE编码，所以需要再输入修改为UTF-16BE,结果如下图：<br><img src="https://i.loli.net/2019/12/10/5qltKAhjWEeiVM1.png" alt="charbuffer演示2.png"><br>也可以使用编码类型为UTF-8的CharBuffer-HeapCharBuffer来存储,但是此时输出的CharBuffer中capacity并不等于limit了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">CharBuffer charBuffer = Charset.forName(<span class="string">"utf-8"</span>).decode(byteBuffer);</span></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2019/12/10/sDNCPUAIugOfh8Z.png" alt="charbuffer演示3.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/12/09/Java%E7%BA%BF%E7%A8%8B%E4%B9%8BAsyncTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="prev" title="Java线程之AsyncTask源码分析">
+      <i class="fa fa-chevron-left"></i> Java线程之AsyncTask源码分析
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#参数、方法"><span class="nav-number">1.</span> <span class="nav-text">参数、方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#创建Buffer"><span class="nav-number">2.</span> <span class="nav-text">创建Buffer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ByteBuffer以字节为单位对数据进行存取"><span class="nav-number">3.</span> <span class="nav-text">ByteBuffer以字节为单位对数据进行存取</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">hongbin.dou</p>
+  <div class="site-description" itemprop="description">士不可以不弘毅，任重而道远</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">hongbin.dou</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/muse.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

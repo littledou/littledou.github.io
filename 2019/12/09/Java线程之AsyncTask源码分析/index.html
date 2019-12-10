@@ -55,7 +55,7 @@
 <meta property="og:description" content="简介 一个Android 已封装好的轻量级异步类 属于抽象类，即使用时需 实现子类 实现多线程，在工作线程中执行任务，如耗时任务 实现工作线程 &amp;amp; 主线程（UI线程）之间的通信 方便实现异步通信 采用线程池的缓存线程 + 复用线程，避免了频繁创建 &amp;amp; 销毁线程所带来的系统资源开销  1static class MyTask extends AsyncTask&amp;lt;Object,">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;09&#x2F;cYAsmpe7g2ZCkzQ.png">
-<meta property="og:updated_time" content="2019-12-09T06:24:18.568Z">
+<meta property="og:updated_time" content="2019-12-09T06:25:37.869Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;09&#x2F;cYAsmpe7g2ZCkzQ.png">
 
@@ -195,7 +195,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-12-09 14:24:05 / 修改时间：14:24:18" itemprop="dateCreated datePublished" datetime="2019-12-09T14:24:05+08:00">2019-12-09</time>
+              <time title="创建时间：2019-12-09 14:24:05 / 修改时间：14:25:37" itemprop="dateCreated datePublished" datetime="2019-12-09T14:24:05+08:00">2019-12-09</time>
             </span>
 
           
@@ -225,6 +225,7 @@
 <li>mWoker：在调用线程中封装参数，准备通过调用mHandler传递给子线程</li>
 <li>mFuture：封装任务执行结束的结果，准备通过sHandler(获取的是主线程的Looper)传递给主线程</li>
 </ul>
+<a id="more"></a>
 <h4 id="线程调度"><a href="#线程调度" class="headerlink" title="线程调度"></a>线程调度</h4><p><strong>相关参数变量</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> CORE_POOL_SIZE = <span class="number">1</span>;<span class="comment">//核心线程数</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_POOL_SIZE = <span class="number">20</span>;<span class="comment">//线程池大小</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BACKUP_POOL_SIZE = <span class="number">5</span>;<span class="comment">//备用线程池参数</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> KEEP_ALIVE_SECONDS = <span class="number">3</span>;<span class="comment">//线程存活时长</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> ThreadPoolExecutor sBackupExecutor;<span class="comment">//备用线程池</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> LinkedBlockingQueue&lt;Runnable&gt; sBackupExecutorQueue;<span class="comment">//备用线程阻塞队列</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Executor THREAD_POOL_EXECUTOR;<span class="comment">//主线程池</span></span></pre></td></tr></table></figure>
 
@@ -262,7 +263,10 @@
     <a href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/" rel="prev" title="Java数据结构分析<2>-ArrayList">
       <i class="fa fa-chevron-left"></i> Java数据结构分析<2>-ArrayList
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/10/JAVA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84NIO%E4%B9%8BBuffer/" rel="next" title="JAVA数据结构NIO之Buffer">
+      JAVA数据结构NIO之Buffer <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -336,7 +340,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

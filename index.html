@@ -168,7 +168,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/10/JAVA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84NIO%E4%B9%8BBuffer/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/12/AndroidIO%E5%9F%BA%E7%A1%801Stream/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -182,7 +182,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/2019/12/10/JAVA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84NIO%E4%B9%8BBuffer/" class="post-title-link" itemprop="url">JAVA数据结构NIO之Buffer</a>
+            <a href="/2019/12/12/AndroidIO%E5%9F%BA%E7%A1%801Stream/" class="post-title-link" itemprop="url">Android IO基础<1>Stream</a>
         </h1>
 
         <div class="post-meta">
@@ -193,7 +193,96 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-12-10 15:21:22 / 修改时间：15:23:32" itemprop="dateCreated datePublished" datetime="2019-12-10T15:21:22+08:00">2019-12-10</time>
+              <time title="创建时间：2019-12-12 14:46:36 / 修改时间：15:50:17" itemprop="dateCreated datePublished" datetime="2019-12-12T14:46:36+08:00">2019-12-12</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li><p>InputStream、OutputStream 基于字节操作的 IO</p>
+</li>
+<li><p>Writer、Reader 基于字符操作的 IO</p>
+</li>
+<li><p>File 基于磁盘操作的 IO</p>
+</li>
+<li><p>Socket 基于网络操作的 IO</p>
+</li>
+<li><p>BIO：Blocking IO，同步阻塞编程，服务端启动一个ServerSocket监听网络请求，客户端启动Socket，默认情况下服务端启动一个线程与之通信，如果服务端无线程可用，客户端等待或者遭到拒绝，BIO 就是传统的 java.io 包，它是基于流模型实现的，交互的方式是同步、阻塞方式，也就是说在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞在那里，它们之间的调用时可靠的线性顺序。它的有点就是代码比较简单、直观；缺点就是 IO 的效率和扩展性很低，容易成为应用性能瓶颈。</p>
+</li>
+<li><p>NIO：UnBlocking IO（New IO），同步非阻塞编程。NIO 是 Java 1.4 引入的 java.nio 包，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程序，同时提供了更接近操作系统底层高性能的数据操作方式。</p>
+</li>
+<li><p>AIO：AIO 是 Java 1.7 之后引入的包，是 NIO 的升级版本，提供了异步非堵塞的 IO 操作方式，所以人们叫它 AIO（Asynchronous IO），异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。</p>
+</li>
+</ul>
+<p>同步阻塞模式：这种模式下，我们的工作模式是先来到厨房，开始烧水，并坐在水壶面前一直等着水烧开。</p>
+<p>同步非阻塞模式：这种模式下，我们的工作模式是先来到厨房，开始烧水，但是我们不一直坐在水壶前面等，而是回到客厅看电视，然后每隔几分钟到厨房看一下水有没有烧开。</p>
+<p>异步非阻塞I/O模型：这种模式下，我们的工作模式是先来到厨房，开始烧水，我们不一一直坐在水壶前面等，也不隔一段时间去看一下，而是在客厅看电视，水壶上面有个开关，水烧开之后他会通知我。</p>
+<p>阻塞VS非阻塞：人是否坐在水壶前面一直等。</p>
+<p>同步VS异步：水壶是不是在水烧开之后主动通知人。<br><img src="https://i.loli.net/2019/12/12/Wp6l9GMQTJOC7nX.png" alt="io种类.png"></p>
+<ul>
+<li>BufferedReader：从控制台读取字符、字符串输入</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//读取字符</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">BufferedReader bufferedReader = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> c;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> ((c = (<span class="keyword">char</span>) bufferedReader.read()) != <span class="string">'q'</span>) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    System.out.println(c);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//读取字符串</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">String str;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (!(str = bufferedReader.readLine()).equals(<span class="string">"end"</span>)) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    System.out.println(str);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
+<ul>
+<li>控制台输出<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">PrintStream printStream = <span class="keyword">new</span> PrintStream(System.out);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">printStream.write(<span class="string">'o'</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">printStream.write(<span class="string">'u'</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">printStream.write(<span class="string">'t'</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">printStream.write(<span class="string">'\n'</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//等同与</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="string">"out"</span>);</span></pre></td></tr></table></figure></li>
+<li>读写文件：FileInputStream、FileOutputStream<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">OutputStream outputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">"./file.txt"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    outputStream.write(<span class="string">'c'</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    e.printStackTrace();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">StreamUtil.closeStreamPipe(outputStream);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">InputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"./file.txt"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">System.out.println(StreamUtil.read0(inputStream));</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">StreamUtil.closeStreamPipe(inputStream);</span></pre></td></tr></table></figure>
+中文读写文件<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">OutputStream outputStream = <span class="keyword">new</span> FileOutputStream(<span class="string">"./file.txt"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">OutputStreamWriter outputStreamWriter = <span class="keyword">new</span> OutputStreamWriter(outputStream, StandardCharsets.UTF_8);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">    outputStreamWriter.write(<span class="string">"中文输入"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">    outputStreamWriter.write(<span class="string">"english"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    outputStreamWriter.write(<span class="string">"\r\n"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    outputStreamWriter.append(<span class="string">"中文输入"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    outputStreamWriter.append(<span class="string">"english"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    e.printStackTrace();</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">StreamUtil.closeStreamPipe(outputStreamWriter);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">StreamUtil.closeStreamPipe(outputStream);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">InputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="string">"./file.txt"</span>);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">System.out.println(StreamUtil.read0(inputStream));</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">StreamUtil.closeStreamPipe(inputStream);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line"><span class="comment">//java7 &amp; android 26</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">Files.write(Paths.get(path), <span class="string">"ignb \n"</span>.getBytes(StandardCharsets.UTF_8), StandardOpenOption.APPEND);</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">System.out.println(<span class="keyword">new</span> String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8));</span></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/10/NIO%E4%B9%8BBuffer%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="hongbin.dou">
+      <meta itemprop="description" content="士不可以不弘毅，任重而道远">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="littledou">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/12/10/NIO%E4%B9%8BBuffer%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">NIO之Buffer详解</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-10 15:21:22 / 修改时间：15:29:41" itemprop="dateCreated datePublished" datetime="2019-12-10T15:21:22+08:00">2019-12-10</time>
             </span>
 
           
@@ -225,7 +314,7 @@
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2019/12/10/JAVA%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84NIO%E4%B9%8BBuffer/#more" rel="contents">
+              <a class="btn" href="/2019/12/10/NIO%E4%B9%8BBuffer%E8%AF%A6%E8%A7%A3/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -537,7 +626,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

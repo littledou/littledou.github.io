@@ -55,7 +55,7 @@
 <meta property="og:description" content="InputStream、OutputStream 基于字节操作的 IO  Writer、Reader 基于字符操作的 IO  File 基于磁盘操作的 IO  Socket 基于网络操作的 IO  BIO：Blocking IO，同步阻塞编程，服务端启动一个ServerSocket监听网络请求，客户端启动Socket，默认情况下服务端启动一个线程与之通信，如果服务端无线程可用，客户端等待或者遭到">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;12&#x2F;Wp6l9GMQTJOC7nX.png">
-<meta property="og:updated_time" content="2019-12-12T07:50:17.019Z">
+<meta property="og:updated_time" content="2019-12-13T03:33:50.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;12&#x2F;Wp6l9GMQTJOC7nX.png">
 
@@ -193,10 +193,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-12-12 14:46:36 / 修改时间：15:50:17" itemprop="dateCreated datePublished" datetime="2019-12-12T14:46:36+08:00">2019-12-12</time>
+              <time title="创建时间：2019-12-12 14:46:36" itemprop="dateCreated datePublished" datetime="2019-12-12T14:46:36+08:00">2019-12-12</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-13 11:33:50" itemprop="dateModified" datetime="2019-12-13T11:33:50+08:00">2019-12-13</time>
+              </span>
 
           
 
@@ -229,7 +235,9 @@
 <p>同步非阻塞模式：这种模式下，我们的工作模式是先来到厨房，开始烧水，但是我们不一直坐在水壶前面等，而是回到客厅看电视，然后每隔几分钟到厨房看一下水有没有烧开。</p>
 <p>异步非阻塞I/O模型：这种模式下，我们的工作模式是先来到厨房，开始烧水，我们不一一直坐在水壶前面等，也不隔一段时间去看一下，而是在客厅看电视，水壶上面有个开关，水烧开之后他会通知我。</p>
 <p>阻塞VS非阻塞：人是否坐在水壶前面一直等。</p>
-<p>同步VS异步：水壶是不是在水烧开之后主动通知人。<br><img src="https://i.loli.net/2019/12/12/Wp6l9GMQTJOC7nX.png" alt="io种类.png"></p>
+<p>同步VS异步：水壶是不是在水烧开之后主动通知人。</p>
+<a id="more"></a>
+<p><img src="https://i.loli.net/2019/12/12/Wp6l9GMQTJOC7nX.png" alt="io种类.png"></p>
 <ul>
 <li>BufferedReader：从控制台读取字符、字符串输入</li>
 </ul>
@@ -258,7 +266,10 @@
     <a href="/2019/12/10/NIO%E4%B9%8BBuffer%E8%AF%A6%E8%A7%A3/" rel="prev" title="NIO之Buffer详解">
       <i class="fa fa-chevron-left"></i> NIO之Buffer详解
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2019/12/13/AndroidIO%E5%9F%BA%E7%A1%802Socket%E9%80%9A%E4%BF%A1/" rel="next" title="Android IO基础<2>Socket通信">
+      Android IO基础<2>Socket通信 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -331,7 +342,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

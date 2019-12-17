@@ -49,8 +49,8 @@
   <meta name="description" content="要点 基于顺序表数组实现，允许空值以及null,可自动扩容 线程不安全  基本操作1List&amp;lt;String&amp;gt; list &#x3D; new ArrayList();2list.add(&quot;data1&quot;);3list.add(0,&quot;data2&quot;);4list.get(0);5list.remove(0);6list.clear(); 构造方法1&#x2F;&#x2F;默认初始容量2private static fin">
 <meta name="keywords" content="Java, Android, C, 数据结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java数据结构分析&lt;2&gt;-ArrayList">
-<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;08&#x2F;Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList&#x2F;index.html">
+<meta property="og:title" content="Android源码分析&lt;2&gt;ArrayList数据结构">
+<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;08&#x2F;Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902-ArrayList&#x2F;index.html">
 <meta property="og:site_name" content="littledou">
 <meta property="og:description" content="要点 基于顺序表数组实现，允许空值以及null,可自动扩容 线程不安全  基本操作1List&amp;lt;String&amp;gt; list &#x3D; new ArrayList();2list.add(&quot;data1&quot;);3list.add(0,&quot;data2&quot;);4list.get(0);5list.remove(0);6list.clear(); 构造方法1&#x2F;&#x2F;默认初始容量2private static fin">
 <meta property="og:locale" content="zh-CN">
@@ -58,11 +58,11 @@
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;JCKr4V2nZMlGEg1.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;hD35CMiYlyJgPvw.png">
 <meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;d3fQoz1L9GmcHFW.png">
-<meta property="og:updated_time" content="2019-12-08T13:17:39.582Z">
+<meta property="og:updated_time" content="2019-12-17T07:16:57.105Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;08&#x2F;3aQjT96qHzEGIZm.png">
 
-<link rel="canonical" href="https://github.com/littledou/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/">
+<link rel="canonical" href="https://github.com/littledou/2019/12/08/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902-ArrayList/">
 
 
 <script id="page-configurations">
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title>Java数据结构分析<2>-ArrayList | littledou</title>
+  <title>Android源码分析<2>ArrayList数据结构 | littledou</title>
   
 
 
@@ -174,7 +174,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%902-ArrayList/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/08/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%902-ArrayList/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -187,7 +187,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Java数据结构分析<2>-ArrayList
+          Android源码分析<2>ArrayList数据结构
         </h1>
 
         <div class="post-meta">
@@ -196,10 +196,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-12-08 21:00:24 / 修改时间：21:17:39" itemprop="dateCreated datePublished" datetime="2019-12-08T21:00:24+08:00">2019-12-08</time>
+              <time title="创建时间：2019-12-08 21:00:24" itemprop="dateCreated datePublished" datetime="2019-12-08T21:00:24+08:00">2019-12-08</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-17 15:16:57" itemprop="dateModified" datetime="2019-12-17T15:16:57+08:00">2019-12-17</time>
+              </span>
 
           
 
@@ -256,12 +262,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/08/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%901-HashMap/" rel="prev" title="Java数据结构分析<1>-HashMap">
-      <i class="fa fa-chevron-left"></i> Java数据结构分析<1>-HashMap
+    <a href="/2019/12/08/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%901-HashMap/" rel="prev" title="Android源码分析<1>HashMap数据结构">
+      <i class="fa fa-chevron-left"></i> Android源码分析<1>HashMap数据结构
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/12/09/Java%E7%BA%BF%E7%A8%8B%E4%B9%8BAsyncTask%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" rel="next" title="Java线程之AsyncTask源码分析">
-      Java线程之AsyncTask源码分析 <i class="fa fa-chevron-right"></i>
+    <a href="/2019/12/09/Android%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%903-AsyncTask/" rel="next" title="Android源码分析<3>AsyncTask解析">
+      Android源码分析<3>AsyncTask解析 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -336,7 +342,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

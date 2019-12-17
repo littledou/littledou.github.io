@@ -46,20 +46,20 @@
   };
 </script>
 
-  <meta name="description" content="InputStream、OutputStream 基于字节操作的 IO  Writer、Reader 基于字符操作的 IO  File 基于磁盘操作的 IO  Socket 基于网络操作的 IO  BIO：Blocking IO，同步阻塞编程，服务端启动一个ServerSocket监听网络请求，客户端启动Socket，默认情况下服务端启动一个线程与之通信，如果服务端无线程可用，客户端等待或者遭到">
+  <meta name="description" content="InputStream、OutputStream 基于字节操作的 IO Writer、Reader 基于字符操作的 IO File 基于磁盘操作的 IO Socket 基于网络操作的 IO     - 字节流 字符流    输入流 InputStream Reader   输出流 OutputStream Writer    BIO：Blocking IO，同步阻塞编程，服务端启动一个Serve">
 <meta name="keywords" content="Java, Android, C, 数据结构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android IO基础&lt;1&gt;Stream">
-<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;12&#x2F;AndroidIO%E5%9F%BA%E7%A1%801Stream&#x2F;index.html">
+<meta property="og:title" content="Android IO基础&lt;1&gt;IO类型">
+<meta property="og:url" content="https:&#x2F;&#x2F;github.com&#x2F;littledou&#x2F;2019&#x2F;12&#x2F;12&#x2F;AndroidIO%E5%9F%BA%E7%A1%801IO%E7%B1%BB%E5%9E%8B&#x2F;index.html">
 <meta property="og:site_name" content="littledou">
-<meta property="og:description" content="InputStream、OutputStream 基于字节操作的 IO  Writer、Reader 基于字符操作的 IO  File 基于磁盘操作的 IO  Socket 基于网络操作的 IO  BIO：Blocking IO，同步阻塞编程，服务端启动一个ServerSocket监听网络请求，客户端启动Socket，默认情况下服务端启动一个线程与之通信，如果服务端无线程可用，客户端等待或者遭到">
+<meta property="og:description" content="InputStream、OutputStream 基于字节操作的 IO Writer、Reader 基于字符操作的 IO File 基于磁盘操作的 IO Socket 基于网络操作的 IO     - 字节流 字符流    输入流 InputStream Reader   输出流 OutputStream Writer    BIO：Blocking IO，同步阻塞编程，服务端启动一个Serve">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;12&#x2F;Wp6l9GMQTJOC7nX.png">
-<meta property="og:updated_time" content="2019-12-13T03:33:50.964Z">
+<meta property="og:image" content="evernotecid:&#x2F;&#x2F;028C1A82-3227-44A5-A415-44AF4B998A7C&#x2F;appyinxiangcom&#x2F;14321263&#x2F;ENResource&#x2F;p27">
+<meta property="og:updated_time" content="2019-12-13T04:13:30.317Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;i.loli.net&#x2F;2019&#x2F;12&#x2F;12&#x2F;Wp6l9GMQTJOC7nX.png">
+<meta name="twitter:image" content="evernotecid:&#x2F;&#x2F;028C1A82-3227-44A5-A415-44AF4B998A7C&#x2F;appyinxiangcom&#x2F;14321263&#x2F;ENResource&#x2F;p27">
 
-<link rel="canonical" href="https://github.com/littledou/2019/12/12/AndroidIO%E5%9F%BA%E7%A1%801Stream/">
+<link rel="canonical" href="https://github.com/littledou/2019/12/12/AndroidIO%E5%9F%BA%E7%A1%801IO%E7%B1%BB%E5%9E%8B/">
 
 
 <script id="page-configurations">
@@ -71,7 +71,7 @@
   };
 </script>
 
-  <title>Android IO基础<1>Stream | littledou</title>
+  <title>Android IO基础<1>IO类型 | littledou</title>
   
 
 
@@ -171,7 +171,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/12/AndroidIO%E5%9F%BA%E7%A1%801Stream/">
+    <link itemprop="mainEntityOfPage" href="https://github.com/littledou/2019/12/12/AndroidIO%E5%9F%BA%E7%A1%801IO%E7%B1%BB%E5%9E%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -184,7 +184,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Android IO基础<1>Stream
+          Android IO基础<1>IO类型
         </h1>
 
         <div class="post-meta">
@@ -201,7 +201,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-13 11:33:50" itemprop="dateModified" datetime="2019-12-13T11:33:50+08:00">2019-12-13</time>
+                <time title="修改时间：2019-12-13 12:13:30" itemprop="dateModified" datetime="2019-12-13T12:13:30+08:00">2019-12-13</time>
               </span>
 
           
@@ -216,28 +216,40 @@
 
       
         <ul>
-<li><p>InputStream、OutputStream 基于字节操作的 IO</p>
-</li>
-<li><p>Writer、Reader 基于字符操作的 IO</p>
-</li>
-<li><p>File 基于磁盘操作的 IO</p>
-</li>
-<li><p>Socket 基于网络操作的 IO</p>
-</li>
-<li><p>BIO：Blocking IO，同步阻塞编程，服务端启动一个ServerSocket监听网络请求，客户端启动Socket，默认情况下服务端启动一个线程与之通信，如果服务端无线程可用，客户端等待或者遭到拒绝，BIO 就是传统的 java.io 包，它是基于流模型实现的，交互的方式是同步、阻塞方式，也就是说在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞在那里，它们之间的调用时可靠的线性顺序。它的有点就是代码比较简单、直观；缺点就是 IO 的效率和扩展性很低，容易成为应用性能瓶颈。</p>
-</li>
-<li><p>NIO：UnBlocking IO（New IO），同步非阻塞编程。NIO 是 Java 1.4 引入的 java.nio 包，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程序，同时提供了更接近操作系统底层高性能的数据操作方式。</p>
-</li>
-<li><p>AIO：AIO 是 Java 1.7 之后引入的包，是 NIO 的升级版本，提供了异步非堵塞的 IO 操作方式，所以人们叫它 AIO（Asynchronous IO），异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。</p>
-</li>
+<li>InputStream、OutputStream 基于字节操作的 IO</li>
+<li>Writer、Reader 基于字符操作的 IO</li>
+<li>File 基于磁盘操作的 IO</li>
+<li>Socket 基于网络操作的 IO</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th>字节流</th>
+<th>字符流</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输入流</td>
+<td>InputStream</td>
+<td>Reader</td>
+</tr>
+<tr>
+<td>输出流</td>
+<td>OutputStream</td>
+<td>Writer</td>
+</tr>
+</tbody></table>
+<ul>
+<li>BIO：Blocking IO，同步阻塞编程，服务端启动一个ServerSocket监听网络请求，客户端启动Socket，默认情况下服务端启动一个线程与之通信，如果服务端无线程可用，客户端等待或者遭到拒绝，BIO 就是传统的 java.io 包，它是基于流模型实现的，交互的方式是同步、阻塞方式，也就是说在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞在那里，它们之间的调用时可靠的线性顺序。它的有点就是代码比较简单、直观；缺点就是 IO 的效率和扩展性很低，容易成为应用性能瓶颈。</li>
+<li>NIO：UnBlocking IO（New IO），同步非阻塞编程。NIO 是 Java 1.4 引入的 java.nio 包，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程序，同时提供了更接近操作系统底层高性能的数据操作方式。</li>
+<li>AIO：AIO 是 Java 1.7 之后引入的包，是 NIO 的升级版本，提供了异步非堵塞的 IO 操作方式，所以人们叫它 AIO（Asynchronous IO），异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。</li>
 </ul>
 <p>同步阻塞模式：这种模式下，我们的工作模式是先来到厨房，开始烧水，并坐在水壶面前一直等着水烧开。</p>
 <p>同步非阻塞模式：这种模式下，我们的工作模式是先来到厨房，开始烧水，但是我们不一直坐在水壶前面等，而是回到客厅看电视，然后每隔几分钟到厨房看一下水有没有烧开。</p>
 <p>异步非阻塞I/O模型：这种模式下，我们的工作模式是先来到厨房，开始烧水，我们不一一直坐在水壶前面等，也不隔一段时间去看一下，而是在客厅看电视，水壶上面有个开关，水烧开之后他会通知我。</p>
 <p>阻塞VS非阻塞：人是否坐在水壶前面一直等。</p>
-<p>同步VS异步：水壶是不是在水烧开之后主动通知人。</p>
-<a id="more"></a>
-<p><img src="https://i.loli.net/2019/12/12/Wp6l9GMQTJOC7nX.png" alt="io种类.png"></p>
+<p>同步VS异步：水壶是不是在水烧开之后主动通知人。<br><img src="evernotecid://028C1A82-3227-44A5-A415-44AF4B998A7C/appyinxiangcom/14321263/ENResource/p27" alt="44761f03916c038d5dc6349c2282b8cc.png"></p>
 <ul>
 <li>BufferedReader：从控制台读取字符、字符串输入</li>
 </ul>
@@ -263,8 +275,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/12/10/NIO%E4%B9%8BBuffer%E8%AF%A6%E8%A7%A3/" rel="prev" title="NIO之Buffer详解">
-      <i class="fa fa-chevron-left"></i> NIO之Buffer详解
+    <a href="/2019/12/10/AndroidIO%E5%9F%BA%E7%A1%80NIO%E4%B9%8BBuffer%E8%AF%A6%E8%A7%A3/" rel="prev" title="AndroidIO基础4NIO之Buffer详解.md">
+      <i class="fa fa-chevron-left"></i> AndroidIO基础4NIO之Buffer详解.md
     </a></div>
       <div class="post-nav-item">
     <a href="/2019/12/13/AndroidIO%E5%9F%BA%E7%A1%802Socket%E9%80%9A%E4%BF%A1/" rel="next" title="Android IO基础<2>Socket通信">
@@ -342,7 +354,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
